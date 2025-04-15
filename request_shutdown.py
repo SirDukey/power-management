@@ -1,9 +1,13 @@
+import os
 import pika
 import socket
+from dotenv import load_dotenv
 
+
+load_dotenv()
 
 def send_shutdown_request(hostname):
-    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(os.getenv('RABBITMQ_HOST', 'localhost')))
     channel = connection.channel()
     queue_name = f'{hostname}_shutdown_requests'
     channel.queue_declare(queue=queue_name)

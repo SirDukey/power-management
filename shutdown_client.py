@@ -1,7 +1,10 @@
-import pika
 import os
+import pika
 import socket
+from dotenv import load_dotenv
 
+
+load_dotenv()
 
 def on_message(ch, method, properties, body):
     hostname = socket.gethostname()
@@ -11,7 +14,7 @@ def on_message(ch, method, properties, body):
 
 def monitor_shutdown_approvals():
     hostname = socket.gethostname()
-    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(os.getenv('RABBITMQ_HOST', 'localhost')))
     channel = connection.channel()
     queue_name = f'{hostname}_shutdown_approvals'
     channel.queue_declare(queue=queue_name)
