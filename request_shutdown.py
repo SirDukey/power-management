@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 
 load_dotenv()
+hostname = socket.gethostname()
 
 def send_shutdown_request(hostname):
     connection = pika.BlockingConnection(pika.ConnectionParameters(os.getenv('RABBITMQ_HOST', 'localhost')))
@@ -24,5 +25,5 @@ def send_shutdown_request(hostname):
     print(f" [x] Sent 'Shutdown request for {hostname}'")
     connection.close()
 
-hostname = socket.gethostname()
+
 send_shutdown_request(hostname)

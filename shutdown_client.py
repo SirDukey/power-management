@@ -5,15 +5,14 @@ from dotenv import load_dotenv
 
 
 load_dotenv()
+hostname = socket.gethostname()
 
 def on_message(ch, method, properties, body):
-    hostname = socket.gethostname()
     if body.decode() == f'Shutdown approved for {hostname}':
         print(f" [x] Shutdown approved for {hostname}")
         #os.system('shutdown -h now')
 
 def monitor_shutdown_approvals():
-    hostname = socket.gethostname()
     connection = pika.BlockingConnection(pika.ConnectionParameters(os.getenv('RABBITMQ_HOST', 'localhost')))
     channel = connection.channel()
     queue_name = f'{hostname}_shutdown_approvals'
