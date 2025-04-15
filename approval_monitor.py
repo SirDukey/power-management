@@ -19,8 +19,16 @@ def send_approval(hostname):
     channel = connection.channel()
     queue_name = f'{hostname}_shutdown_approvals'
     channel.queue_declare(queue=queue_name)
+    properties=pika.BasicProperties(
+        expiration=str(int(os.getenv('MESSAGE_TTL', 60) * 1000))
+        )
 
-    channel.basic_publish(exchange='', routing_key=queue_name, body=f'Shutdown approved for {hostname}')
+    channel.basic_publish(
+        exchange='', 
+        routing_key=queue_name, 
+        body=f'Shutdown approved for {hostname}',
+        properties=properties
+    )
     print(f" [x] Sent 'Shutdown approved for {hostname}'")
     connection.close()
 
@@ -29,7 +37,7 @@ def monitor_shutdown_requests():
     channel = connection.channel()
 
     # List of hostnames to monitor
-    hostnames = ['ws-nlix-136.local']  # Add your hostnames here
+    hostnames = ['ws-nlix-136.local']
 
     for hostname in hostnames:
         queue_name = f'{hostname}_shutdown_requests'
