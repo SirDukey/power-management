@@ -1,3 +1,4 @@
+import logging
 import os
 import pika
 import socket
@@ -7,10 +8,18 @@ from dotenv import load_dotenv
 load_dotenv()
 hostname = socket.gethostname()
 
+logger = logging.getLogger('shutdown_client')
+logger.setLevel(logging.INFO)
+fh = logging.FileHandler('shutdown_client.log')
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+
 def on_message(ch, method, properties, body):
     if body.decode() == f'Shutdown approved for {hostname}':
         print(f" [x] Shutdown approved for {hostname}")
-        #os.system('shutdown -h now')
+        logger.info({'hostname': hostname, 'user': properties.headers.get('user')})
+        os.system('shutdown -h now')
 
 def monitor_shutdown_approvals():
     connection = pika.BlockingConnection(pika.ConnectionParameters(os.getenv('RABBITMQ_HOST', 'localhost')))

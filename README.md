@@ -12,13 +12,15 @@ Using RabbitMQ as a centralized message broker allows all hosts to only make out
 
 ### Usage
 
-Start a RabbitMQ container first then use the following scripts with `uv run ...`
+1. clone this repository
+2. Install [uv](https://github.com/astral-sh/uv), then setup the project with `uv sync`
+3. Start a RabbitMQ container using the [script](run-rabbit-container.sh)
+4. use `uv run ...` for each script you wish to run
 
 - `shutdown_client.py` - can be run on each host via systemd, it listens for approved shutdowns and executes the shutdown command.
 - `request_shutdown.py` - can be used in place of the shutdown command to send a shutdown request.
 - `approval_monitor.py` - checks for shutdown requests allowing you to approve or deny
 
 ### Future improvements:
-Integrate a way of signing the approval (using headers in the messages) and writing the event to either a log or sqlite.  If using a log file then it could then be forwarded to a logging server like Loki or Fluentd
 
 An idea I have is to create a small API using FastAPI which would take the place of the `approval_monitor.py` script.  It could send an email or webhook message with an embeded approval link/button, when clicked the api request would then send the rabbit message.
