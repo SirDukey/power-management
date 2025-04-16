@@ -1,3 +1,7 @@
+![python](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
+![rabbitmq](https://img.shields.io/badge/rabbitmq-%23FF6600.svg?&style=for-the-badge&logo=rabbitmq&logoColor=white)
+![docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
+
 ## Power management for approving host shutdown.
 
 This is a toy project, I have chosen RabbitMQ in place of a traditional API & DB is to learn more about message queues.
